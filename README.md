@@ -14,8 +14,8 @@ funcionalidades extras:
 O app foi construido de forma bem simples e rápida para o propósito de ajudar nesse evento, podendo conter erros ao buscar o limite do programa, porém estou disposto a arrumar e mandar as supostas atualizações para o pessoal do evento.
 
 utilizei imagens gratuitas do flaticon, segue os autores:
-https://www.flaticon.com/br/icone-gratis/bingo_5149420?term=bingo&page=1&position=3&origin=search&related_id=5149420
-https://www.flaticon.com/br/icone-gratis/tela-cheia_570953?term=tela&page=1&position=25&origin=search&related_id=570953
-https://www.flaticon.com/br/icone-gratis/imagem_739249?term=imagem&page=1&position=1&origin=search&related_id=739249
-https://www.flaticon.com/br/icone-gratis/computador_4373065?term=tela&page=1&position=2&origin=search&related_id=4373065
-https://www.flaticon.com/br/icone-gratis/minimizar_2989876?term=minimizar&page=1&position=12&origin=search&related_id=2989876
+* https://www.flaticon.com/br/icone-gratis/bingo_5149420?term=bingo&page=1&position=3&origin=search&related_id=5149420
+* https://www.flaticon.com/br/icone-gratis/tela-cheia_570953?term=tela&page=1&position=25&origin=search&related_id=570953
+* https://www.flaticon.com/br/icone-gratis/imagem_739249?term=imagem&page=1&position=1&origin=search&related_id=739249
+* https://www.flaticon.com/br/icone-gratis/computador_4373065?term=tela&page=1&position=2&origin=search&related_id=4373065
+* https://www.flaticon.com/br/icone-gratis/minimizar_2989876?term=minimizar&page=1&position=12&origin=search&related_id=2989876
