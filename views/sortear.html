@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sorteio</title>
+    <link rel="stylesheet" href="Basic.css">
+</head>
+
+<body>
+    <div class="bingo">
+        <img src="../Icones/bingo.png">
+    </div>
+    <div id="toolbar">
+        <button id="btnVoltarHome" style="margin-bottom: 15px;">← Voltar para Início</button>
+    </div>
+    <h1>Sorteio</h1>
+    <div id="container">
+        <div id="sorteio">
+            <label for="inputSortear">Digite o número sorteado:</label>
+            <input type="text" id="inputSortear" maxlength="5" placeholder="Número Sorteado" oninput="this.value = this.value.replace(/\D/g, '')" pattern="\d*" style="text-align: center;"/>
+            <button id="btnSortear">Sortear</button>
+            <button id="btnLimparTelao" style="margin-top: 10px;">Limpar Telão</button>
+            <button id="btnAbrirTelao" style="margin-top: 10px;">Abrir Telão</button>
+            <button id="btnDivulgar" style="margin-top: 10px;">Divulgar Items do Sorteio</button>
+        </div>
+        <div id="lista-container">
+            <div id="lista"></div>
+        </div>
+
+    </div>
+
+    <template id="template-imagem-card">
+        <div class="imagem-card">
+            <div class="bloco-imagem">
+                <div class="imagem-indice"></div>
+                <img class="imagem-preview" />
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal de mensagem -->
+    <div id="modalMensagem" class="modal">
+        <div class="modal-content" id="modalMensagemContent"></div>
+    </div>
+
+    <script src="../renderer/sortear.js"></script>
+</body>
+
+</html>

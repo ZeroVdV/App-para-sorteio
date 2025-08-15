@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Telão</title>
+    <style>
+        body {
+            margin: 0;
+            background: #fff;
+            color: black;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        #interface {
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            left: auto;
+            z-index: 10;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button,
+        input {
+            font-size: 18px;
+            margin: 5px;
+        }
+
+        #interface input {
+            width: 60px;
+            height: 24px;
+            font-size: 14px;
+        }
+
+        .maximizar {
+            height: 24px;
+            width: 24px;
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
+
+        .maximizar img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+
+        #imagem {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 1;
+        }
+
+        #imagem.zoom {
+            animation: zoomIn 0.5s ease forwards;
+        }
+
+        #imagem.sorteio {
+            opacity: 0.85;
+        }
+
+        /*
+        #indiceTelao {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22vw;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+            -webkit-text-stroke: 3px rgb(255, 255, 255);
+        }
+            */
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes indiceZoom {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        #imagem.zoomOut {
+            animation: zoomOut 0.5s ease forwards;
+        }
+
+        @keyframes zoomOut {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        /*
+        #indiceTelao.indiceZoomOut {
+            animation: indiceZoomOut 0.5s ease forwards;
+        }
+            */
+
+        @keyframes indiceZoomOut {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /*
+        #indiceTelao.indiceZoom {
+            animation: indiceZoom 0.5s ease forwards;
+        }
+            */
+
+        .bingo {
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            z-index: 9999;
+        }
+
+        .bingo img {
+            width: 40px;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bingo">
+        <img src="../Icones/bingo.png">
+    </div>
+    <div id="interface">
+        <button id="btnFullscreen" class="maximizar">
+            <img id="iconeFullscreen" src="../Icones/tela-cheia.png">
+        </button>
+    </div>
+    <!--
+    <div id="indiceTelao"></div>
+    -->
+    <img id="imagem" />
+    <script src="../renderer/telao.js"></script>
+</body>
+
+</html>

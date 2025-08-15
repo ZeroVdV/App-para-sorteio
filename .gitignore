@@ -1,0 +1,15 @@
+
+node_modules/
+
+# Local do exe
+dist/
+
+database/*.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

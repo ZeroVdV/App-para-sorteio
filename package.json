@@ -1,0 +1,39 @@
+{
+  "name": "app-sorteio",
+  "version": "1.0.3",
+  "main": "main.js",
+  "description": "Aplicativo de sorteio",
+  "author": "Augusto R Landim",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron .",
+    "clean": "rimraf dist",
+    "dist": "npm run clean && electron-builder"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.seuusuario.appsorteio",
+    "productName": "App Sorteio",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/.bin",
+      "!dist"
+    ],
+    "asarUnpack": [
+      "node_modules/sqlite3/**"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "Icones/LOGO.ico"
+    }
+  }
+}

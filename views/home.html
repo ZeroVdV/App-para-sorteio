@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Página Inicial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f5;
+        }
+        img.logo {
+            width: 200px;
+            margin-bottom: 40px;
+        }
+
+        .bingo {
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            z-index: 9999;
+        }
+
+        .bingo img {
+            width: 40px;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+        button {
+            width: 200px;
+            font-size: 18px;
+            padding: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 2px solid #333;
+            background: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #c8d4ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="bingo">
+        <img src="../Icones/bingo.png">
+    </div>
+    <img class="logo" src="../Icones/bingo.png" alt="Logo do Sorteio" />
+    <button id="btnCadastrar">Cadastrar Items</button>
+    <button id="btnSortear">Sorteio</button>
+
+    <script>
+        document.getElementById('btnCadastrar').onclick = () => {
+            window.location.href = 'index.html';
+        };
+        document.getElementById('btnSortear').onclick = () => {
+            window.location.href = 'sortear.html';
+        };
+    </script>
+</body>
+</html>
+
+
