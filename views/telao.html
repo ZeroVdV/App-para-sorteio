@@ -52,8 +52,9 @@
         }
 
         #imagem {
-            width: 100vw;
-            height: 100vh;
+            display: block;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             transition: opacity 0.5s ease, transform 0.5s ease;
             opacity: 1;
@@ -67,22 +68,39 @@
             opacity: 0.85;
         }
 
-        /*
+        .oculto {
+    display: none !important;
+}
+
         #indiceTelao {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22vw;
-            font-weight: bold;
-            color: rgba(0, 0, 0, 0.9);
+            top: 72px;
+            left: 96px;
+            width: 128px;
+            height: 128px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 50%;
+            border: 2px solid rgb(0, 0, 0);
             text-align: center;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
-            -webkit-text-stroke: 3px rgb(255, 255, 255);
+            line-height: 128px;
+            font-size: 42px;
+            font-weight: bold;
+            z-index: 10;
         }
-            */
+
+
+        .indiceImagem {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            padding-top: 60px;
+            padding-left: 60px;
+            box-sizing: border-box;
+            background: #eee;
+            /* só para visualização */
+        }
+
+
 
         @keyframes zoomIn {
             0% {
@@ -129,11 +147,11 @@
             }
         }
 
-        /*
+
         #indiceTelao.indiceZoomOut {
             animation: indiceZoomOut 0.5s ease forwards;
         }
-            */
+
 
         @keyframes indiceZoomOut {
             from {
@@ -147,16 +165,16 @@
             }
         }
 
-        /*
+
         #indiceTelao.indiceZoom {
             animation: indiceZoom 0.5s ease forwards;
         }
-            */
+
 
         .bingo {
             position: fixed;
             bottom: 5px;
-            right: 10px;
+            left: 10px;
             z-index: 9999;
         }
 
@@ -178,10 +196,12 @@
             <img id="iconeFullscreen" src="../Icones/tela-cheia.png">
         </button>
     </div>
-    <!--
-    <div id="indiceTelao"></div>
-    -->
-    <img id="imagem" />
+
+    <div class="indiceImagem">
+        <img id="imagem" src="sua-imagem.jpg" />
+        <div id="indiceTelao"></div>
+    </div>
+
     <script src="../renderer/telao.js"></script>
 </body>
 

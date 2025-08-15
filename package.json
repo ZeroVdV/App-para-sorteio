@@ -1,6 +1,6 @@
 {
   "name": "app-sorteio",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "main.js",
   "description": "Aplicativo de sorteio",
   "author": "Augusto R Landim",
