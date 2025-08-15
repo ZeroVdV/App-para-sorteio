@@ -98,9 +98,20 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
+    let salvando = false;
+
     btnSalvar.onclick = async () => {
+        if (salvando) return;
+        salvando = true;
+        btnSalvar.disabled = true; 
+
         const indice = parseInt(indiceInput.value);
-        if (!indice) return mostrarMensagem('⚠ Informe um número para o sorteio.');
+        if (!indice) {
+            mostrarMensagem('⚠ Informe um número para o sorteio.');
+            btnSalvar.disabled = false;
+            salvando = false;
+            return;
+        }
 
         if (indicesExistentes.includes(indice) && (!editando || indice !== indiceEditando)) {
             const card = cardsMap.get(indice);
@@ -108,12 +119,26 @@ window.addEventListener('DOMContentLoaded', async () => {
                 card.classList.add('destacado-vermelho');
                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-            return mostrarMensagem(`⚠ O número ${indice} já existe.`);
+            mostrarMensagem(`⚠ O número ${indice} já existe.`);
+            btnSalvar.disabled = false;
+            salvando = false;
+            return;
         }
 
-        if (!caminhoImagem && !editando) return mostrarMensagem('⚠ Escolha uma imagem para o item.');
+        if (!caminhoImagem && !editando) {
+            mostrarMensagem('⚠ Escolha uma imagem para o item.');
+            btnSalvar.disabled = false;
+            salvando = false;
+            return;
+        }
+
         if (editando && !caminhoImagem) caminhoImagem = preview.src || null;
-        if (editando && !caminhoImagem) return mostrarMensagem('⚠ Escolha uma imagem para o item.');
+        if (editando && !caminhoImagem) {
+            mostrarMensagem('⚠ Escolha uma imagem para o item.');
+            btnSalvar.disabled = false;
+            salvando = false;
+            return;
+        }
 
         try {
             if (editando) {
@@ -123,12 +148,15 @@ window.addEventListener('DOMContentLoaded', async () => {
                 await window.api.salvarImagem({ indice, caminho: caminhoImagem });
             }
         } catch (err) {
-            mostrarMensagem('❌ Erro ao salvar: ' + err.message);
+            mostrarMensagem('❌ Erro ao salvar: ' + err.message, 'erro');
         }
 
         caminhoImagem = null;
         preview.style.display = 'none';
         await atualizarLista();
+
+        btnSalvar.disabled = false;
+        salvando = false;
     };
 
     window.editar = (id, indiceAtual, caminhoAtual) => {

@@ -11,6 +11,30 @@ window.addEventListener('DOMContentLoaded', async () => {
     let divulgacaoInterval = null;
     let divulgacaoLista = [];
 
+    // ---------- NOVAS VARIÁVEIS DE ESTADO ----------
+    let telãoAberto = false;
+    let tipoAtual = null; // 'sorteio' | 'divulgacao' | null
+    let indiceAtual = null;
+
+    // ---------- FUNÇÃO AUXILIAR: ABRIR TELÃO E AGUARDAR ----------
+    async function abrirTelaoEAguardar() {
+        await window.api.abrirTelao();
+        const aberto = await aguardarTelaoAberto();
+        if (aberto) telãoAberto = true;
+        return aberto;
+    }
+
+    async function aguardarTelaoAberto(timeout = 5000, intervalo = 100) {
+        const inicio = Date.now();
+        while (Date.now() - inicio < timeout) {
+            const aberto = await window.api.verificarTelaoAberto?.();
+            if (aberto) return true;
+            await new Promise(r => setTimeout(r, intervalo));
+        }
+        return false; // timeout
+    }
+
+    // ---------- FUNÇÃO ATUALIZAR LISTA ----------
     async function atualizarLista() {
         imagens = await window.api.listarImagens();
         lista.innerHTML = '';
@@ -27,10 +51,13 @@ window.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'home.html';
     };
 
-    // --- Abrir Telão ---
-    btnAbrirTelao.onclick = () => window.api.abrirTelao();
+    // ---------- ABRIR TELÃO MANUAL ----------
+    btnAbrirTelao.onclick = async () => {
+        const aberto = await abrirTelaoEAguardar();
+        if (!aberto) mostrarMensagem('Não foi possível abrir o telão.', 'erro');
+    };
 
-    // --- Parar divulgação ---
+    // ---------- PARAR DIVULGAÇÃO ----------
     async function pararDivulgacao() {
         if (divulgacaoInterval) {
             clearInterval(divulgacaoInterval);
@@ -38,26 +65,47 @@ window.addEventListener('DOMContentLoaded', async () => {
             btnDivulgar.textContent = "Divulgar Items do Sorteio";
         }
         limparDestaquesDivulgacao();
+        tipoAtual = null;
     }
 
-    // --- Limpar Telão ---
+    // ---------- LIMPAR TELÃO ----------
     btnLimparTelao.onclick = () => {
-        window.api.limparTelao();
-        pararDivulgacao();
+        if (tipoAtual === 'divulgacao') {
+            // Apagar sem animação no índice
+            window.api.limparTelao();
+        } else if (tipoAtual === 'sorteio') {
+            // Mantém animação de saída no índice
+            window.api.limparTelao();
+        }
 
-        lista.querySelectorAll('.imagem-card.destacado-azul')
-            .forEach(c => c.classList.remove('destacado-azul'));
+        pararDivulgacao();
+        indiceAtual = null;
+        tipoAtual = null;
+
+        // Limpa destaques da lista
+        lista.querySelectorAll('.imagem-card.destacado-azul, .imagem-card.destacado-divulgacao')
+            .forEach(c => c.classList.remove('destacado-azul', 'destacado-divulgacao'));
+
         inputSortear.value = '';
     };
-    // --- Sorteio manual ---
-    function sortearIndice() {
+
+    // ---------- SORTEIO MANUAL ----------
+    async function sortearIndice() {
         const indiceDigitado = parseInt(inputSortear.value);
         if (!isNaN(indiceDigitado)) {
             const item = imagens.find(i => i.indice === indiceDigitado);
             if (item) {
-                window.api.abrirTelao();
-                window.api.enviarIndiceSelecionado(indiceDigitado, 'sorteio'); // <- tipo sorteio
+                const aberto = await abrirTelaoEAguardar();
+                if (!aberto) {
+                    mostrarMensagem('Não foi possível abrir o telão.', 'erro');
+                    return;
+                }
+
+                window.api.enviarIndiceSelecionado(indiceDigitado, 'sorteio');
                 pararDivulgacao();
+
+                tipoAtual = 'sorteio';
+                indiceAtual = indiceDigitado;
             } else {
                 mostrarMensagem('Índice digitado não existe na lista.', 'erro');
             }
@@ -72,7 +120,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (e.key === 'Enter') sortearIndice();
     });
 
-    // --- Seleção na lista enquanto digita ---
+    // ---------- SELEÇÃO NA LISTA ENQUANTO DIGITA ----------
     inputSortear.addEventListener('input', () => {
         const valor = parseInt(inputSortear.value);
         const cards = lista.querySelectorAll('.imagem-card');
@@ -89,7 +137,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // --- Divulgação automática ---
+    // ---------- DIVULGAÇÃO AUTOMÁTICA ----------
     btnDivulgar.onclick = async () => {
         if (divulgacaoInterval) {
             pararDivulgacao();
@@ -97,7 +145,13 @@ window.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        window.api.abrirTelao();
+        const aberto = await abrirTelaoEAguardar();
+        if (!aberto) {
+            mostrarMensagem('Não foi possível abrir o telão.', 'erro');
+            return;
+        }
+
+        tipoAtual = 'divulgacao';
         divulgacaoLista = [...imagens];
         btnDivulgar.textContent = "Parar Divulgação";
 
@@ -106,6 +160,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             const randomIdx = Math.floor(Math.random() * divulgacaoLista.length);
             const item = divulgacaoLista.splice(randomIdx, 1)[0];
             window.api.enviarIndiceSelecionado(item.indice, 'divulgacao');
+            indiceAtual = item.indice;
 
             // aplica destaque azul
             const card = [...lista.querySelectorAll('.imagem-card')]
@@ -120,13 +175,12 @@ window.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            if (divulgacaoLista.length === 0) {
-                divulgacaoLista = [...imagens];
-            }
+            if (divulgacaoLista.length === 0) divulgacaoLista = [...imagens];
 
             const randomIdx = Math.floor(Math.random() * divulgacaoLista.length);
             const item = divulgacaoLista.splice(randomIdx, 1)[0];
             window.api.enviarIndiceSelecionado(item.indice, 'divulgacao');
+            indiceAtual = item.indice;
 
             // remove apenas destaque de divulgação anterior
             lista.querySelectorAll('.imagem-card.destacado-divulgacao')
@@ -140,6 +194,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }, 8000);
     };
 
+    // ---------- MENSAGENS ----------
     function mostrarMensagem(texto, tipo = 'info', duracao = 5000) {
         const div = document.createElement('div');
         div.className = 'mensagem';
